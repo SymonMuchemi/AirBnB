@@ -2,11 +2,15 @@
 """The base model class that parents all other classes"""
 import uuid
 from datetime import datetime
+from . import storage
 
 
 class BaseModel:
+    """the blueprint for model classes
+    """
     def __init__(self, *args, **kwargs):
-        """Intializes the """
+        """initializing the base mode
+        """
         self.id = str(uuid.uuid4()) # The unique id
         self.created_at = datetime.now()
         self.update_at = datetime.now()
@@ -24,6 +28,7 @@ class BaseModel:
     def save(self):
         """Update the 'update_at' with the current datetime"""
         self.update_at = datetime.now()
+        storage.save(self)
     
     def to_dict(self):
         """creates a dictionary description of the instance
