@@ -13,7 +13,7 @@ class BaseModel:
         """
         self.id = str(uuid.uuid4()) # The unique id
         self.created_at = datetime.now()
-        self.update_at = datetime.now()
+        self.update_at = self.created_at
         
         if len(args) == 0:
             if len(kwargs) > 0:
@@ -24,6 +24,9 @@ class BaseModel:
                         self.created_at = str(val)
                     if key == "updated_at":
                         self.update_at = str(val)
+        # Check if the instance is new and not from a dictionary representation
+        if len(args) == 0 and len(kwargs) == 0:
+            storage.save(self)
         
     def save(self):
         """Update the 'update_at' with the current datetime"""
