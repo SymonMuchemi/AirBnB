@@ -26,7 +26,7 @@ class BaseModel:
                         self.update_at = str(val)
         # Check if the instance is new and not from a dictionary representation
         if len(args) == 0 and len(kwargs) == 0:
-            storage.save()
+            storage.new(self)
         
     def save(self):
         """Update the 'update_at' with the current datetime"""

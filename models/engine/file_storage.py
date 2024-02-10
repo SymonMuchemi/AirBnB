@@ -3,6 +3,7 @@
 well as deserialization
 """
 import json, os
+from models.base_model import BaseModel
 
 
 class FileSorage:
@@ -24,13 +25,13 @@ class FileSorage:
         """sets in __objects obj with the key 
         <obj class name>.id
         """
-        if type(obj) is dict:
-            self.__objects[f"{obj.classname}.{obj.id}"] = obj 
+        if isinstance(obj, BaseModel):
+            self.__objects[f"{obj.__class__}.{obj.id}"] = obj.to_dict() 
         
     def save(self):
         """save the __object dictionary to JSON file
         """
-        with open(self.__file_path, 'w+', encoding='utf-8') as fp:
+        with open(self.__file_path, 'w', encoding='utf-8') as fp:
             json.dump(self.__objects, fp)
 
     def reload(self):
