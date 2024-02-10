@@ -31,7 +31,7 @@ class BaseModel:
     def save(self):
         """Update the 'update_at' with the current datetime"""
         self.update_at = datetime.now()
-        storage.save(self)
+        storage.save()
     
     def to_dict(self):
         """creates a dictionary description of the instance
@@ -49,4 +49,4 @@ class BaseModel:
     def __str__(self):
         """prints a short description of the instance
         """
-        return f"[s{self.__class__}] ({self.id}) {self.__dict__}"
+        return f"[{self.__class__}] ({self.id}) {self.__dict__}"
