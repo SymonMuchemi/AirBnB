@@ -1,5 +1,7 @@
 # AirBnB_clone
 
+![Holberton AirBnb](hbnb.png)
+
 ## Introduction
 
 This is project incoporates a console application for manipulating data without visual interface.

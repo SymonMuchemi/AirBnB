@@ -9,7 +9,7 @@ class FileSorage:
     def __init__(self):
         """the blueprint for the class
         """
-        self.__file_path = "file.json"
+        self.__file_path = "./file.json"
         self.__objects = {}
         
     def all(self):
@@ -30,7 +30,7 @@ class FileSorage:
     def save(self):
         """save the __object dictionary to JSON file
         """
-        with open(self.__file_path, 'a',ncoding='utf-8') as fp:
+        with open(self.__file_path, 'a', encoding='utf-8') as fp:
             json.dump(self.__objects, fp)
 
     def reload(self):
