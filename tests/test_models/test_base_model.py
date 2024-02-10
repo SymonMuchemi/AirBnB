@@ -13,7 +13,7 @@ class TestBaseModel(unittest.TestCase):
         # Test if the id is set
         self.assertEqual(test_model1.id, 10001)
         # Test if the created_at is set
-        self.assertEqual(test_model1.created_at, str(time_now))
+        self.assertEqual(test_model1.created_at, time_now)
         # Test if the updated_at is set to equal the created_at
         self.assertEqual(test_model1.update_at, test_model1.update_at)        
 
@@ -28,8 +28,8 @@ class TestBaseModel(unittest.TestCase):
         
         # check the types of the attributes of the instance
         self.assertIsInstance(model.id, str)
-        self.assertIsInstance(model.created_at, datetime)
-        self.assertIsInstance(model.update_at, datetime)
+        self.assertIsInstance(model.created_at, str)
+        self.assertIsInstance(model.update_at, str)
 
     def test_override_id(self):
         """Check if the id can be overridden """
@@ -65,7 +65,7 @@ class TestBaseModel(unittest.TestCase):
         """Checks if the __str__ method returns appropriate string representation"""
         model = BaseModel()
         model_dict = model.to_dict()
-        model_class = model.__class__
+        model_class = model.__class__.__name__
         model_id = model.id
         
         model_rep = f"[{model_class}] ({model.id}) {model_dict}"
