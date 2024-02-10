@@ -26,7 +26,7 @@ class FileSorage:
         <obj class name>.id
         """
         if isinstance(obj, BaseModel):
-            self.__objects[f"{obj.__class__}.{obj.id}"] = obj.to_dict() 
+            self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj.to_dict() 
         
     def save(self):
         """save the __object dictionary to JSON file
@@ -37,8 +37,10 @@ class FileSorage:
     def reload(self):
         """deserializes the JSON file to __objects
         """
-        if not os.path.exists(self.__file_path):
-            return
-
-        with open(self.__file_path, 'r', encoding='utf-8') as fp:
-            return json.load(fp)
+        try:
+            with open(self.__file_path, 'r') as f:
+                self.__objects = json.load(f)
+        except json.JSONDecodeError:
+            self.__objects = {}
+        except FileNotFoundError:
+            pass

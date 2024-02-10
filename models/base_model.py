@@ -11,7 +11,7 @@ class BaseModel:
         """initializing the base mode
         """
         self.id = str(uuid.uuid4()) # The unique id
-        self.created_at = str(datetime.now())
+        self.created_at = datetime.now()
         self.update_at = self.created_at
         
         if len(args) == 0:
@@ -41,13 +41,13 @@ class BaseModel:
             dict: a dictionary of instance attributes including
             the __class__ attribute
         """
-        self.created_at = (self.created_at).strftime("%Y-%m-%dT%H:%M:%S.%f")
-        self.update_at = (self.update_at).strftime("%Y-%m-%dT%H:%M:%S.%f")
-        self.__dict__["__class__"] = self.__class__
+        self.created_at = str((self.created_at).strftime("%Y-%m-%dT%H:%M:%S.%f"))
+        self.update_at = str((self.update_at).strftime("%Y-%m-%dT%H:%M:%S.%f"))
+        self.__dict__["__class__"] = self.__class__.__name__
         
         return self.__dict__
 
     def __str__(self):
         """prints a short description of the instance
         """
-        return f"[{self.__class__}] ({self.id}) {self.__dict__}"
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
