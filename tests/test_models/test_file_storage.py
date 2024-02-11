@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""Tests for the FileStorage class
+    """
 import json
 import os
 
@@ -8,6 +10,11 @@ from models.base_model import BaseModel
 
 
 class TestFileSorage(TestCase):
+    """tests for edge cases of FileStorage
+
+    Args:
+        TestCase (self): the edge case being tested
+    """
     def setUp(self):
         # Create a temporary file for testing
         self.temp_file_path = "test_file.json"

@@ -8,8 +8,11 @@ form = '%Y-%m-%dT%H:%M:%S.%f'
 
 
 class TestBaseModel(unittest.TestCase):
-    """Test the BaseClass"""
+    """edges cases
 
+    Args:
+        unittest (self): the test case
+    """
     def test_initilization_with_arguments(self):
         time_now = datetime.now()
         test_model1 = BaseModel(id=10001, created_at=time_now)
@@ -21,7 +24,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(test_model1.update_at, test_model1.update_at)
 
     def test_init_with_no_args(self):
-        """Test initialization with no arguments"""
+        """Test object creation with no passed arguments
+        """
         model = BaseModel()
 
         # check if model has all attributes
