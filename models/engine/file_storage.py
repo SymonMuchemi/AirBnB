@@ -10,7 +10,7 @@ class FileStorage:
     def __init__(self):
         """the blueprint for the class
         """
-        self.__file_path = "./file.json"
+        self.__file_path = "file.json"
         self.__objects = {}
 
     def all(self):
@@ -19,7 +19,7 @@ class FileStorage:
         Returns:
             dict: list of objects stored
         """
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """sets in __objects obj with the key
@@ -30,18 +30,24 @@ class FileStorage:
             self.__objects[obj_key] = obj.to_dict()
 
     def save(self):
-        """save the __object dictionary to JSON file
-        """
-        with open(self.__file_path, 'w', encoding='utf-8') as fp:
-            json.dump(self.__objects, fp)
+        """serializes __objects to the JSON file"""
+        obj_dictionary = {key: obj.to_dict()
+                       for key, obj in self.__objects.items()}
+        with open(self.__file_path, 'w') as file:
+            json.dump(obj_dictionary, file)
 
     def reload(self):
         """deserializes the JSON file to __objects
         """
         try:
-            with open(self.__file_path, 'r') as f:
-                self.__objects = json.load(f)
-        except json.JSONDecodeError:
-            self.__objects = {}
-        except FileNotFoundError:
+            with open(self.__file_path, 'r') as file:
+                data = json.load(file)
+                for obj_data in data.values():
+                    cls_name = obj_data.get("__class__")
+                    if cls_name:
+                        cls = self.get_class_by_name(cls_name)
+                        if cls:
+                            obj = cls(**obj_data)
+                            self.new(obj)
+        except Exception:
             pass

@@ -13,30 +13,24 @@ class BaseModel:
         """initializing the base mode
         """
         self.id = str(uuid.uuid4())  # The unique id
-        self.created_at = datetime.now()
+        self.created_at = datetime.now().isoformat()
         self.update_at = self.created_at
 
-        if len(args) == 0:
-            if len(kwargs) > 0:
-                for key, val in kwargs.items():
-                    if key == "id":
-                        self.id = val
-                    if key == "created_at":
-                        if isinstance(val, str):
-                            self.created_at = datetime.strptime(val, dtform)
-                        self.created_at = val
-                    if key == "updated_at":
-                        if isinstance(val, str):
-                            self.created_at = datetime.strptime(val, dtform)
-                        self.update_at = val
+        if kwargs:
+            for key, value in kwargs.items():
+                if key != '__class__':
+                    if key in ['created_at', 'updated_at']:
+                        setattr(self, key, datetime.fromisoformat(value))
+                    else:
+                        setattr(self, key, value)
         # Check if the instance is new and not from a dictionary representation
-        if len(args) == 0 and len(kwargs) == 0:
+        if len(kwargs) == 0:
             from . import storage
             storage.new(self)
 
     def save(self):
         """Update the 'update_at' with the current datetime"""
-        self.update_at = str(datetime.now())
+        self.update_at = datetime.now()
         from . import storage
         storage.save()
 
@@ -47,21 +41,12 @@ class BaseModel:
             dict: a dictionary of instance attributes including
             the __class__ attribute
         """
-        # Convert time to str format for serialization
-        if isinstance(self.created_at, datetime):
-            created_at_str = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        else:
-            created_at_str = self.created_at
-        if isinstance(self.update_at, datetime):
-            update_at_str = self.update_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        else:
-            update_at_str = self.update_at
-
-        self.__dict__["created_at"] = created_at_str
-        self.__dict__["update_at"] = update_at_str
-        self.__dict__["__class__"] = self.__class__.__name__
-
-        return self.__dict__
+        object_dict = self.__dict__.copy()
+        object_dict.update({'__class__': self.__class__.__name__})
+        object_dict['created_at'] = self.created_at.isoformat()
+        object_dict['updated_at'] = self.update_at.isoformat()
+        
+        return object_dict
 
     def __str__(self):
         """prints a short description of the instance

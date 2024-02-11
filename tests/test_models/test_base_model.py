@@ -13,8 +13,8 @@ class TestBaseModel(unittest.TestCase):
     Args:
         unittest (self): the test case
     """
-    def test_initilization_with_arguments(self):
-        time_now = datetime.now()
+    def test_initialization_with_arguments(self):
+        time_now = datetime.now().isoformat()
         test_model1 = BaseModel(id=10001, created_at=time_now)
         # Test if the id is set
         self.assertEqual(test_model1.id, 10001)
@@ -35,8 +35,8 @@ class TestBaseModel(unittest.TestCase):
 
         # check the types of the attributes of the instance
         self.assertIsInstance(model.id, str)
-        self.assertIsInstance(model.created_at, str)
-        self.assertIsInstance(model.update_at, str)
+        self.assertIsInstance(model.created_at, datetime)
+        self.assertIsInstance(model.update_at, datetime)
 
     def test_override_id(self):
         """Check if the id can be overridden """
