@@ -48,8 +48,14 @@ class BaseModel:
             the __class__ attribute
         """
         # Convert time to str format for serialization
-        created_at_str = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        update_at_str = self.update_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        if isinstance(self.created_at, datetime):
+            created_at_str = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        else:
+            created_at_str = self.created_at
+        if isinstance(self.update_at, datetime):
+            update_at_str = self.update_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        else:
+            update_at_str = self.update_at
         
         self.__dict__["created_at"] = created_at_str
         self.__dict__["update_at"] = update_at_str
