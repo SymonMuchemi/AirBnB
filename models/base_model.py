@@ -47,13 +47,12 @@ class BaseModel:
             dict: a dictionary of instance attributes including
             the __class__ attribute
         """
-        self.created_at = (self.created_at).strftime("%Y-%m-%dT%H:%M:%S.%f")
-        self.update_at = (self.update_at).strftime("%Y-%m-%dT%H:%M:%S.%f")
+        # Convert time to str format for serialization
+        created_at_str = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        update_at_str = self.update_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
         
-        # convert time to str format for serialization
-        
-        self.created_at = str(self.created_at)
-        self.update_at = str(self.update_at)
+        self.__dict__["created_at"] = created_at_str
+        self.__dict__["update_at"] = update_at_str
         self.__dict__["__class__"] = self.__class__.__name__
         
         return self.__dict__

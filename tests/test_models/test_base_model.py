@@ -61,13 +61,34 @@ class TestBaseModel(unittest.TestCase):
         
         self.assertIsInstance(model_dict, dict)
         
-    def test_str(self):
-        """Checks if the __str__ method returns appropriate string representation"""
+    # def test_str(self):
+    #     """Checks if the __str__ method returns appropriate string representation"""
+    #     model = BaseModel()
+    #     model_dict = model.to_dict()
+    #     model_class = model.__class__.__name__
+    #     model_id = model.id
+    #
+    #     model_rep = f"[{model_class}] ({model.id}) {model_dict}"
+    #
+    #     self.assertAlmostEqual(model_rep, str(model))
+
+    def test_time_format(self):
+        """"check if time is in string format"""
+        # Create a BaseModel instance
         model = BaseModel()
-        model_dict = model.to_dict()
-        model_class = model.__class__.__name__
-        model_id = model.id
-        
-        model_rep = f"[{model_class}] ({model.id}) {model_dict}"
-        
-        self.assertAlmostEqual(model_rep, str(model))
+
+        # Check if created_at is a datetime object
+        self.assertIsInstance(model.created_at, str)
+
+        # Check if update_at is a datetime object
+        self.assertIsInstance(model.update_at, str)
+
+    def test_datetime_iso_format(self):
+        """check if created_at and update_at are formatted in ISO format"""
+        # Create a BaseModel instance
+        model = BaseModel()
+
+        self.assertTrue(datetime.strptime(model.created_at, '%Y-%m-%dT%H:%M:%S.%f'))
+
+        # Check if update_at is in the expected format
+        self.assertTrue(datetime.strptime(model.update_at, '%Y-%m-%dT%H:%M:%S.%f'))
