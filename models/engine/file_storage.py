@@ -2,11 +2,11 @@
 """handles object storage to JSON file as
 well as deserialization
 """
-import json, os
+import json
 from models.base_model import BaseModel
 
 
-class FileSorage:
+class FileStorage:
     def __init__(self):
         """the blueprint for the class
         """
