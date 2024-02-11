@@ -4,6 +4,8 @@ from models.base_model import BaseModel
 from datetime import datetime
 import unittest
 
+form = '%Y-%m-%dT%H:%M:%S.%f'
+
 
 class TestBaseModel(unittest.TestCase):
     """Test the BaseClass"""
@@ -50,7 +52,7 @@ class TestBaseModel(unittest.TestCase):
 
     def test_save_method(self):
         """check if save() updates the update_at attribute"""
-        # check id update_at attribute is different from the created_at attribute
+        # check id update_at attribute is different from created_at
         model = BaseModel()
         model.save()
         self.assertNotEqual(model.created_at, model.update_at)
@@ -62,16 +64,16 @@ class TestBaseModel(unittest.TestCase):
 
         self.assertIsInstance(model_dict, dict)
 
-    # def test_str(self):
-    #     """Checks if the __str__ method returns appropriate string representation"""
-    #     model = BaseModel()
-    #     model_dict = model.to_dict()
-    #     model_class = model.__class__.__name__
-    #     model_id = model.id
-    #
-    #     model_rep = f"[{model_class}] ({model.id}) {model_dict}"
-    #
-    #     self.assertAlmostEqual(model_rep, str(model))
+    def test_str(self):
+        """Checks if the __str__ method returns appropriate string rep"""
+        model = BaseModel()
+        model_dict = model.to_dict()
+        model_class = model.__class__.__name__
+        model_id = model.id
+
+        model_rep = f"[{model_class}] ({model.id}) {model_dict}"
+
+        self.assertAlmostEqual(model_rep, str(model))
 
     def test_time_format(self):
         """"check if time is in string format"""
@@ -89,7 +91,7 @@ class TestBaseModel(unittest.TestCase):
         # Create a BaseModel instance
         model = BaseModel()
 
-        self.assertTrue(datetime.strptime(model.created_at, '%Y-%m-%dT%H:%M:%S.%f'))
+        self.assertTrue(datetime.strptime(model.created_at, form))
 
         # Check if update_at is in the expected format
-        self.assertTrue(datetime.strptime(model.update_at, '%Y-%m-%dT%H:%M:%S.%f'))
+        self.assertTrue(datetime.strptime(model.update_at, form))

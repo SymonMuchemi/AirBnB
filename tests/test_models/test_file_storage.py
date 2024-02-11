@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-import json, os
+import json
+import os
 
 from models.engine.file_storage import FileStorage
 from unittest import TestCase
@@ -16,9 +17,9 @@ class TestFileSorage(TestCase):
     def tearDown(self):
         # Remove the temporary file after testing
         os.remove(self.temp_file_path)
-        
+
     def test_all(self):
-        """Test to see if all objects in the __objects are returned as expected"""
+        """see if all objects in the __objects are returned as expected"""
         storage = FileStorage()
         self.assertEqual(storage.all(), {})
 
@@ -36,7 +37,7 @@ class TestFileSorage(TestCase):
             self.assertIn(key_in_file, objects_stored)
 
     def test_new(self):
-        """checks if the new() method adds the object to the json file with the correct key"""
+        """checks if new() adds the object to the file with correct key"""
         storage = FileStorage()
         test_object = BaseModel()
         storage.new(test_object)
@@ -44,7 +45,7 @@ class TestFileSorage(TestCase):
         obj_class_name = test_object.__class__.__name__
         obj_id = test_object.id
         key_in_file = f"{obj_class_name}.{obj_id}"
-        
+
         with open("./file.json", 'r', encoding='utf-8') as file:
             objects_stored = json.load(file)
             self.assertIn(key_in_file, objects_stored)
@@ -60,11 +61,11 @@ class TestFileSorage(TestCase):
         storage.new(test_object3)
         storage.save()
 
-        # checks if all objects are in the JSON file        
+        # checks if all objects are in the JSON file
         with open("./file.json", 'r', encoding='utf-8') as file:
             objects_stored = json.load(file)
             all_objects = storage.all()
-            
+
             # Check if each object is present in objects_stored
             for obj_id, obj in all_objects.items():
                 self.assertIn(obj_id, objects_stored)
@@ -73,7 +74,8 @@ class TestFileSorage(TestCase):
     def test_reload_existing_file(self):
         """Test reloading from an existing JSON file"""
         storage = FileStorage()
-        storage._FileStorage__file_path = self.temp_file_path  # Set the file path to the temporary file
+        # Set the file path to the temporary file
+        storage._FileStorage__file_path = self.temp_file_path
         storage.reload()
 
         # Check if the objects were loaded correctly
@@ -87,7 +89,8 @@ class TestFileSorage(TestCase):
             f.write("")
 
         storage = FileStorage()
-        storage._FileStorage__file_path = self.temp_file_path  # Set the file path to the temporary file
+        # Set the file path to the temporary file
+        storage._FileStorage__file_path = self.temp_file_path
         storage.reload()
 
         # Check if the objects were reloaded as an empty dictionary
@@ -99,7 +102,8 @@ class TestFileSorage(TestCase):
         non_existent_file_path = "non_existent_file.json"
 
         storage = FileStorage()
-        storage._FileStorage__file_path = non_existent_file_path  # Set the file path to the non-existent file
+        # Set the file path to the non-existent file
+        storage._FileStorage__file_path = non_existent_file_path
         storage.reload()
 
         # Check if the objects were reloaded as an empty dictionary

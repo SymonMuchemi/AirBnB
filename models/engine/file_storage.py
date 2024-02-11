@@ -12,7 +12,7 @@ class FileStorage:
         """
         self.__file_path = "./file.json"
         self.__objects = {}
-        
+
     def all(self):
         """retrieves the dict of all objects
 
@@ -20,14 +20,15 @@ class FileStorage:
             dict: list of objects stored
         """
         return self.__objects
-    
+
     def new(self, obj):
-        """sets in __objects obj with the key 
+        """sets in __objects obj with the key
         <obj class name>.id
         """
         if isinstance(obj, BaseModel):
-            self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj.to_dict() 
-        
+            obj_key = f"{obj.__class__.__name__}.{obj.id}"
+            self.__objects[obj_key] = obj.to_dict()
+
     def save(self):
         """save the __object dictionary to JSON file
         """
