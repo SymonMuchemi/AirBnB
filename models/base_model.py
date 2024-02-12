@@ -12,7 +12,7 @@ class BaseModel:
     def __init__(self):
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
-        self.update_at = created_at
+        self.update_at = self.created_at
         
     def __str__(self):
         """Return a formal representation of the BaseModel obj"""
