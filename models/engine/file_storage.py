@@ -4,51 +4,54 @@ well as deserialization
 """
 import json
 from models.base_model import BaseModel
-from models.user import User
 
 
 class FileStorage:
+    """serializes instances to a JSON file and deserializes 
+    JSON files to instances"""
     def __init__(self):
-        """the blueprint for the class
-        """
-        self.__file_path = "file.json"
+        """creates instances of the file storage class"""
+        # path to the JSON file
+        self.__file_path = 'file.json'
+        # dictionary to store all objects by <classname>.id
         self.__objects = {}
-
+        
     def all(self):
-        """retrieves the dict of all objects
+        """returns all objects saved
 
         Returns:
-            dict: list of objects stored
+            dict: the dictionary containing all objects saved
         """
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
-        """sets in __objects obj with the key
+        """sets in __objects the instance with the key:
         <obj class name>.id
+
+        Args:
+            obj (any): dictionary object
         """
-        if isinstance(obj, BaseModel):
-            obj_key = f"{obj.__class__.__name__}.{obj.id}"
-            self.__objects[obj_key] = obj.to_dict()
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def save(self):
-        """serializes __objects to the JSON file"""
-        obj_dictionary = {key: obj.to_dict()
-                       for key, obj in self.__objects.items()}
+        """serializes the objects in __objects to the JSON file"""
+        obj_dict = {}
+        # TODO: check on the value.to_dict() incase of failure
+        for key, value in self.__objects.items():
+            obj_dict[key] = value.to_dict()
+        
         with open(self.__file_path, 'w') as file:
-            json.dump(obj_dictionary, file)
+            json.dump(obj_dict, file)
 
     def reload(self):
-        """deserializes the JSON file to __objects
-        """
-        try:
+        """deserializes the JSON file to __objects if the file exists"""
+        import os.path
+        # TODO: this part might cause a bug
+        if os.path.isfile(self.__file_path):
             with open(self.__file_path, 'r') as file:
-                data = json.load(file)
-                for obj_data in data.values():
-                    cls_name = obj_data.get("__class__")
-                    if cls_name:
-                        cls = self.get_class_by_name(cls_name)
-                        if cls:
-                            obj = cls(**obj_data)
-                            self.new(obj)
-        except Exception:
-            pass
+                obj_dict = json.load(file)
+                for key, value in obj_dict.items():
+                    class_name, obj_id = key.split('.')
+                    class_obj = eval(class_name)()
+                    class_obj.__dict__.update(value)
+                    self.__objects[key] = class_obj
