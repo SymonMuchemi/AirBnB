@@ -3,6 +3,8 @@
 import uuid
 from datetime import datetime
 
+dtform = "%Y-%m-%dT%H:%M:%S.%f"
+
 
 class BaseModel:
     """the blueprint for model classes
@@ -10,30 +12,28 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """initializing the base mode
         """
-        self.id = str(uuid.uuid4()) # The unique id
-        self.created_at = datetime.now()
+        self.id = str(uuid.uuid4())  # The unique id
+        self.created_at = datetime.now().isoformat()
         self.update_at = self.created_at
-        
-        if len(args) == 0:
-            if len(kwargs) > 0:
-                for key, val in kwargs.items():
-                    if key == "id":
-                        self.id = val
-                    if key == "created_at":
-                        self.created_at = str(val)
-                    if key == "updated_at":
-                        self.update_at = str(val)
+
+        if kwargs:
+            for key, value in kwargs.items():
+                if key != '__class__':
+                    if key in ['created_at', 'updated_at']:
+                        setattr(self, key, datetime.fromisoformat(value))
+                    else:
+                        setattr(self, key, value)
         # Check if the instance is new and not from a dictionary representation
-        if len(args) == 0 and len(kwargs) == 0:
+        if len(kwargs) == 0:
             from . import storage
             storage.new(self)
-        
+
     def save(self):
         """Update the 'update_at' with the current datetime"""
-        self.update_at = str(datetime.now())
+        self.update_at = datetime.now()
         from . import storage
         storage.save()
-    
+
     def to_dict(self):
         """creates a dictionary description of the instance
 
@@ -41,11 +41,12 @@ class BaseModel:
             dict: a dictionary of instance attributes including
             the __class__ attribute
         """
-        self.created_at = str((self.created_at).strftime("%Y-%m-%dT%H:%M:%S.%f"))
-        self.update_at = str((self.update_at).strftime("%Y-%m-%dT%H:%M:%S.%f"))
-        self.__dict__["__class__"] = self.__class__.__name__
+        object_dict = self.__dict__.copy()
+        object_dict.update({'__class__': self.__class__.__name__})
+        object_dict['created_at'] = self.created_at.isoformat()
+        object_dict['updated_at'] = self.update_at.isoformat()
         
-        return self.__dict__
+        return object_dict
 
     def __str__(self):
         """prints a short description of the instance
