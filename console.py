@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """The command line interprater"""
 import cmd
 from models.base_model import BaseModel
