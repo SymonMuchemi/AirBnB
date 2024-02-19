@@ -1,0 +1,30 @@
+section .filter {
+  height: 7px;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #a80e0e;
+  border-radius: 4px;
+}
+
+section button {
+  max-height: 48px;
+  width: 20%;
+  padding-top: 0;
+  padding-bottom: 0;
+  position: absolute;
+  right: 30px;
+  top: 15%;
+  border-radius: 4px;
+  vertical-align: middle;
+  border: none;
+  background-color: #ff5a5f;
+}
+section button:hover {
+  opacity: 90%;
+}
+section button p {
+  font-size: 18px;
+  color: #ffffff;
+  position: relative;
+  top: -4px;
+}
