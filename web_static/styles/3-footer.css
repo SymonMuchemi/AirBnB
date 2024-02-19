@@ -1,0 +1,15 @@
+footer {
+  background-color: #ffffff;
+  height: 60px;
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
+  border-top: 1px solid #cccccc;
+  text-align: center;
+}
+footer p {
+  display: inline-block;
+  vertical-align: middle;
+  position: fixed;
+  bottom: 5px;
+}
